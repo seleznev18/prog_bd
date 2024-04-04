@@ -1,0 +1,24 @@
+import sqlite3
+try:
+    connection=sqlite3.connect('country.db')
+    cursor=connection.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS tCountry(id INTEGER PRIMARY KEY, country_name TEXT, counter INTEGER)")
+    cursor.execute("INSERT INTO tCountry(country_name,counter) VALUES(?,?)",('Germany',2))
+    data1=[('Russia',3),('Brazil',5),('France',1),('Ukraine',89)]
+    cursor.executemany("INSERT INTO tCountry(country_name,counter) VALUES(?,?)",data1)
+    cursor.execute("SELECT * FROM tCountry")
+    first=cursor.fetchone()
+    print(first)
+    cursor.execute("SELECT * FROM tCountry")
+    thr=cursor.fetchmany(3)
+    print(thr)
+    cursor.execute("SELECT * FROM tCountry")
+    alls=cursor.fetchall()
+    print(alls)
+except sqlite3.Error as error:
+    print("Ошибка при подключении к SQLite",error)
+finally:
+    if (connection):
+        connection.commit()
+        connection.close()
+        print("Соединение с SQLite закрыто")

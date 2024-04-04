@@ -1,0 +1,17 @@
+import sqlite3
+try:
+    connection=sqlite3.connect('sqlitePy.db')
+    cursor=connection.cursor()
+    print("База данных создана и успешно подключена к SQLite")
+    select_query="select sqlite_version();"
+    cursor.execute(select_query)
+    record=cursor.fetchall()
+    print("Версия базы SQLite:",record)
+    cursor.close()
+except sqlite3.Error as error:
+    print("Ошибка при подключении sqlite",error)
+finally:
+    if (connection):
+        connection.commit()
+        connection.close()
+        print("Соединение с SQLite закрыто")

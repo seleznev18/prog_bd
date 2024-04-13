@@ -1,0 +1,48 @@
+import sqlite3
+try:
+    connection=sqlite3.connect('music.db')
+    cursor=connection.cursor()
+    cursor.execute("DROP TABLE IF EXISTS tMusician")
+    cursor.execute("DROP TABLE IF EXISTS tSongs")
+    cursor.execute("DROP TABLE IF EXISTS tComments")
+    cursor.execute("CREATE TABLE IF NOT EXISTS tMusician(id INTEGER PRIMARY KEY AUTOINCREMENT,canonicalName TEXT,age INTEGER,gender TEXT)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS tSongs(id INTEGER PRIMARY KEY AUTOINCREMENT,id_musician INTEGER NOT NULL,title TEXT,description TEXT,FOREIGN KEY(id_musician) REFERENCES tMusician(id))")
+    cursor.execute("CREATE TABLE IF NOT EXISTS tComments(id INTEGER PRIMARY KEY AUTOINCREMENT,textComm TEXT,id_Musician INTEGER,id_Song INTEGER,FOREIGN KEY (id_Musician) REFERENCES tMusician(id),FOREIGN KEY (id_Song) REFERENCES tSongs(id))")
+    cursor.execute('INSERT INTO tMusician VALUES (NULL, ?,?,?)', ( "James Hetfield", 69, "Male"))
+    cursor.execute('INSERT INTO tMusician VALUES (NULL,?,?,?)', ( "Freddy Mercury", 27, "Male"))
+    cursor.execute('INSERT INTO tMusician VALUES (NULL,?,?,?)', ( "Kurt Cobain", 27, "Male"))
+    cursor.execute('INSERT INTO tMusician VALUES (NULL,?,?,?)', ( "Brian May", 78, "Male"))
+    cursor.execute('INSERT INTO tMusician VALUES (NULL,?,?,?)', ( "Viktor Tsoy", 25, "Male"))
+    cursor.execute('INSERT INTO tSongs VALUES (NULL,?,?,?)', (1, "Hardwired", "Heavy Metal" ))
+    cursor.execute('INSERT INTO tSongs VALUES (NULL,?,?,?)', (3, "In Bloom", "Grunge" ))
+    cursor.execute('INSERT INTO tSongs VALUES (NULL,?,?,?)', (2, "We will rock you", "ROCK"))
+    cursor.execute('INSERT INTO tSongs VALUES (NULL,?,?,?)', ( 4,"Another one Bites the Dust", "Funk"))
+    cursor.execute('INSERT INTO tSongs VALUES (NULL,?,?,?)', (5, "Gruppa Krovi", "ROCK" ))
+    cursor.execute('INSERT INTO tComments VALUES (NULL,?,?,?)', ( "best song ever", 1, 1 ))
+    cursor.execute('INSERT INTO tComments VALUES (NULL,?,?,?)', ( "best drums", 2, 2 ))
+    cursor.execute('INSERT INTO tComments VALUES (NULL,?,?,?)', ( "ok", 3, 3 ))
+    cursor.execute('INSERT INTO tComments VALUES (NULL,?,?,?)', ( "10/10", 4, 4 ))
+    cursor.execute('INSERT INTO tComments VALUES (NULL,?,?,?)', ( "ok", 5, 5 ))
+    cursor.execute('SELECT * FROM tMusician')
+    musicians = cursor.fetchall()
+    cursor.execute('SELECT * FROM tSongs')
+    songs = cursor.fetchall()
+    cursor.execute('SELECT * FROM tComments')
+    comments = cursor.fetchall()
+    for user in musicians:
+        print(user)
+    print("\n")
+    for user in songs:
+        print(user)
+    print("\n")
+    for user in comments:
+        print(user)
+    print("\n")
+    cursor.close()
+except sqlite3.Error as error:
+    print("Ошибка:", error)
+finally:
+    if (connection):
+        connection.commit()
+        connection.close()
+        print("Соединение с SQLite закрыто")
